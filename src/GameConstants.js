@@ -3,11 +3,6 @@ class GameConstants {
   static CARD_SIZE = 50;
   static BOARD_DIMENSION = 6;
 
-  /**
-   * Shuffles array in place. ES6 version
-   * Source: https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
-   * @param {Array} array An array containing the items.
-   */
   static shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
