@@ -1,0 +1,47 @@
+.punto {
+  text-align: center;
+}
+
+.punto > header {
+  margin: auto;
+}
+
+.punto > header > .logo {
+  width: 150px;
+}
+
+.punto .menu {
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.punto .menu input {
+  flex: 0 0 auto;
+  margin: auto 10px;
+}
+
+.punto > .board {
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  user-select: none;
+}
+
+.punto > .next_card {
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  user-select: none;
+}
+
+.punto > .next_card > div {
+  display: block;
+  margin: auto
+}
+
+.punto > .next_card .remaining_cards {
+  font-size: 0.5em;
+}
