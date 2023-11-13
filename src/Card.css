@@ -24,9 +24,3 @@
 .card.open>.cardContent:hover {
     outline: 2px solid #333;
 }
-
-
-/* TMP */
-/* .card.hidden > .cardContent {
-  outline: 1px solid #EEE;
-} */

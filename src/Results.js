@@ -41,17 +41,6 @@ function Results({ player_scores, player_color, width }) {
                   />
                 ))}
               </div>
-              <div
-                className="totalScore"
-                ref={scoreRef}
-                style={{
-                  fontSize: scoreFontSize,
-                  width: board_width / 10 + "px",
-                  marginLeft: board_margin + "px",
-                }}
-              >
-                {scores.length > 1 && "= " + scores.reduce((acc, v) => acc + v)}
-              </div>
             </li>
           ))}
         </ul>

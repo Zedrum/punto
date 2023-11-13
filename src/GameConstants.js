@@ -1,6 +1,7 @@
 class GameConstants {
   static DECK = [9, 9, 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1];
-  static CARD_SIZE = 50;
+  static COLORS = ["red", "cyan", "green", "yellow"];
+  static CARD_SIZE = 90;
   static BOARD_DIMENSION = 6;
 
   static shuffleArray(array) {
@@ -40,6 +41,14 @@ class GameConstants {
   static convert2DCoordinatesTo1DIndex(x, y, dimX, dimY) {
     return y * dimX + x;
   }
+
+  static initializePlayerDecks() {
+    const playerDecks = Array.from({ length: 4 }, () =>
+      GameConstants.shuffleArray([...GameConstants.DECK])
+    );
+    return playerDecks;
+  }
 }
+
 
 export default GameConstants;

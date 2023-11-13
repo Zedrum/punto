@@ -15,7 +15,7 @@
   align-items: center;
 }
 
-.punto .results li + li:before {
+.punto .results li+li:before {
   border-top: 1px solid black;
 }
 
@@ -38,6 +38,6 @@
   white-space: nowrap;
 }
 
-.punto .scoreboard .score + .score:before {
+.punto .scoreboard .score+.score:before {
   content: "+";
 }

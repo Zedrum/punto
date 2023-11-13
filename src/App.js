@@ -6,16 +6,16 @@ import Card from "./Card.js";
 import Board from "./Board.js";
 import Results from "./Results.js";
 
+// Extracting commonly used functions and constants from the Global module
 const {
   convert1DIndexTo2DCoordinates,
   convert2DCoordinatesTo1DIndex,
-  shuffleArray,
   removeFirstOccurrence,
   BOARD_DIMENSION,
-  DECK,
-  CARD_SIZE,
+  CARD_SIZE
 } = Global;
 
+// Function to create a placeholder card with no player, used for initializing the board
 function no_card (x, y) {
   return {
     card: -1,
@@ -27,7 +27,7 @@ function no_card (x, y) {
 }
 
 const DEFAULT_STATE = () => {
-  const empty_board = [];
+  const empty_board = [];  // Initialize an empty board
   for (var i = 0; i < (BOARD_DIMENSION + 1) * (BOARD_DIMENSION + 1); i++) {
     const { x, y } = convert1DIndexTo2DCoordinates(i, BOARD_DIMENSION + 1, BOARD_DIMENSION + 1);
     empty_board.push({
@@ -40,11 +40,11 @@ const DEFAULT_STATE = () => {
   }
 
   return {
-    n_players: 2,
+    n_players: 4,
     cur_player: 0,
-    player_color: ["red", "cyan"],
-    player_deck: [shuffleArray([...DECK]), shuffleArray([...DECK])],
-    player_scores: [[], []],
+    player_color: Global.COLORS,
+    player_deck: Global.initializePlayerDecks(),
+    player_scores: [[], [], [], []],
     plays: [],
 
     // board on screen
@@ -69,25 +69,34 @@ const DEFAULT_STATE = () => {
   };
 };
 
+// Main App component 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = DEFAULT_STATE();
   }
 
+  // Lifecycle method: called after the component has been inserted into the DOM
   componentDidMount() {
     this.setup();
   }
 
+  // Function to reset the game state and set up a new game
   reset = () => {
-    this.setState(DEFAULT_STATE(), this.setup);
+    this.setState({ ...DEFAULT_STATE(), player_deck: Global.initializePlayerDecks() },
+      this.setup,
+      this.sendDataToApi()
+    );
   };
 
+
+  // Function to set up the game
   setup() {
     this.update_board();
     this.setup_decks();
   }
 
+  // Function to customize player decks based on their scores
   setup_decks() {
     const decks = this.state.player_deck;
 
@@ -204,17 +213,17 @@ class App extends Component {
     };
   }
 
-  update_board() {
+  update_board() {// update the board state
     const board = this.mk_board();
     this.setState({ board }, this.win_condition);
   }
 
-  board_coord(x, y) {
+  board_coord(x, y) { // convert 2D coordinates to 1D index
     const { dimx, dimy, minx, miny } = this.state.board;
     return convert2DCoordinatesTo1DIndex(x - minx, y - miny, dimx, dimy);
   }
 
-  check_line(x, player, n_consec) {
+  check_line(x, player, n_consec) { // check if there are consecutive cards of the same player in the same line
     const { dimy, miny, board } = this.state.board;
 
     var n_consecutive = 0;
@@ -248,7 +257,7 @@ class App extends Component {
     return [];
   }
 
-  check_col(y, player, n_consec) {
+  check_col(y, player, n_consec) { // check if there are consecutive cards of the same player in the same column
     const { dimx, minx, board } = this.state.board;
 
     var n_consecutive = 0;
@@ -344,8 +353,6 @@ class App extends Component {
   }
 
   win_condition(n_consec = 4) {
-    // win_condition is called after each move, we only need to consider
-    // the lines, rows and diags involving last play
 
     if (this.state.plays.length === 0 || this.state.won) return;
 
@@ -490,6 +497,31 @@ class App extends Component {
     );
   };
 
+  sendDataToApi = async () => {
+    try {
+      const apiUrl = 'localhost:5000/api/games';
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          playerNumber: this.state.n_players,
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Données envoyées avec succès à l\'API');
+
+      } else {
+        console.error('Échec de l\'envoi des données à l\'API');
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi des données à l\'API :', error);
+    }
+  };
+
+  // get the current player, card, and deck
   get_cur_player = () => this.state.cur_player;
 
   get_cur_card = () => {
@@ -524,7 +556,7 @@ class App extends Component {
             {cur_player >= 0 ?
               `Player ${cur_player} won!`
               :
-              `It's a DRAW !`
+              `DRAW !`
             }
             <br />
             <input type="button" value="Next round" onClick={this.next_round} />
@@ -532,7 +564,7 @@ class App extends Component {
         ) : (
           <div className="next_card" style={{ width: board_dimx + "px" }}>
             <div>
-              <div>Next card:</div>
+              <div>Card:</div>
               <div className="remaining_cards">
                 Remaining: {this.get_cur_deck().length}
               </div>

@@ -6,30 +6,28 @@ import Card from "./Card.js";
 
 function no_click() { }
 
-function Board ({ board: { dimx, dimy, board }, player_color, onClick }) {
+function Board ({ board: { dimx, dimy, board }, onClick }) {
   const board_dimx = dimx * Global.CARD_SIZE
   const board_dimy = dimy * Global.CARD_SIZE
   return <div
     className="board"
     style={{ width: board_dimx + "px", height: board_dimy + "px" }}
   >
-    {board.map(({ card, player, x, y, kind }, idx) => {
+  {
+    board.map(({ card, player, x, y, kind }, idx) => {
       return (
         <Card
           card={card}
-          color={
-            player === -1 ? "white" : player_color[player]
-          }
+          color={player === -1 ? "white" : Global.COLORS[player]}
           x={x}
           y={y}
           kind={kind}
-          onClick={
-            kind === "hidden" ? no_click : onClick
-          }
+          onClick={kind === "hidden" ? no_click : onClick}
           key={idx}
         />
       );
-    })}
+    })
+  }
   </div>
 }
 

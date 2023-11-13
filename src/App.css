@@ -2,11 +2,11 @@
   text-align: center;
 }
 
-.punto > header {
+.punto>header {
   margin: auto;
 }
 
-.punto > header > .logo {
+.punto>header>.logo {
   width: 150px;
 }
 
@@ -23,25 +23,26 @@
   margin: auto 10px;
 }
 
-.punto > .board {
+.punto>.board {
   display: flex;
   flex-wrap: wrap;
   margin: auto;
   user-select: none;
 }
 
-.punto > .next_card {
+.punto>.next_card {
   display: flex;
   flex-wrap: wrap;
   margin: auto;
   user-select: none;
 }
 
-.punto > .next_card > div {
+.punto>.next_card>div {
   display: block;
   margin: auto
 }
 
-.punto > .next_card .remaining_cards {
+.punto>.next_card .remaining_cards {
   font-size: 0.5em;
 }
+
