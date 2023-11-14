@@ -65,7 +65,10 @@ const DEFAULT_STATE = () => {
       maxy: 0,
     },
 
+    player_wins: [0, 0, 0, 0],
     won: false,
+    showWinMessage: false,
+
   };
 };
 
@@ -83,9 +86,16 @@ class App extends Component {
 
   // Function to reset the game state and set up a new game
   reset = () => {
-    this.setState({ ...DEFAULT_STATE(), player_deck: Global.initializePlayerDecks() },
+    const winningPlayer = this.state.winningPlayer; // Récupérer le joueur gagnant
+    this.setState(
+      {
+        ...DEFAULT_STATE(),
+        player_deck: Global.initializePlayerDecks(),
+        showWinMessage: false,
+        winningPlayer: winningPlayer, // Rétablir le joueur gagnant après la réinitialisation
+      },
       this.setup,
-      this.sendDataToApi()
+      this.sendDataToApi
     );
   };
 
@@ -115,11 +125,26 @@ class App extends Component {
   }
 
   next_round = () => {
-    const scores = this.state.player_scores;
-    this.setState(DEFAULT_STATE(), () =>
-      this.setState({ player_scores: scores }, this.setup)
-    );
-  };
+  const scores = this.state.player_scores;
+  const { cur_player, player_wins } = this.state;
+
+  const updatedWins = [...player_wins];
+  updatedWins[cur_player] += 1;
+
+  this.setState(
+    DEFAULT_STATE(),
+    () => {
+      this.setState({ player_scores: scores, player_wins: updatedWins }, () => {
+        if (updatedWins[cur_player] === 1) { // à rechanger à 2 pour 2 rounds après
+          this.setState({ showWinMessage: true, winningPlayer: cur_player });
+        } else {
+          this.setup();
+        }
+      });
+    }
+  );
+}; 
+
 
   mk_board() {
     const {
@@ -541,46 +566,60 @@ class App extends Component {
     const board_dimx = dimx * CARD_SIZE;
     const cur_player = this.get_cur_player();
     const cur_card = this.get_cur_card();
+    let message;
+    if (this.state.showWinMessage) {
+      const winningPlayer = this.state.winningPlayer;
+      message = `Player ${winningPlayer} has won 2 rounds !!!`;
+    }
     const cur_color = this.state.player_color[cur_player];
     return (
-      <div className="punto">
-        {board && (
-          <Board
-            board={this.state.board}
-            player_color={this.state.player_color}
-            onClick={this.handle_click}
-          />
-        )}
-        {this.state.won ? (
-          <div className="won" style={{ color: cur_color }}>
-            {cur_player >= 0 ?
-              `Player ${cur_player} won!`
-              :
-              `DRAW !`
-            }
-            <br />
-            <input type="button" value="Next round" onClick={this.next_round} />
-          </div>
-        ) : (
-          <div className="next_card" style={{ width: board_dimx + "px" }}>
-            <div>
-              <div>Card:</div>
-              <div className="remaining_cards">
-                Remaining: {this.get_cur_deck().length}
-              </div>
+          <div className="punto">
+      {this.state.showWinMessage ? (
+        <div className="win-message">
+          <p>{message}</p>
+          <input type="button" value="Start a New Game" onClick={this.reset} />
+        </div>
+      ) : (
+        <>
+          {this.state.board && (
+            <Board
+              board={this.state.board}
+              player_color={this.state.player_color}
+              onClick={this.handle_click}
+            />
+          )}
+          {this.state.won ? (
+            <div className="won" style={{ color: cur_color }}>
+              {cur_player >= 0 ?
+                `Player ${cur_player} won!`
+                :
+                `DRAW !`
+              }
+              <br />
+              <input type="button" value="Continue" onClick={this.next_round} />
             </div>
-            <Card card={cur_card} color={cur_color} kind="show" />
+          ) : (
+            <div className="next_card" style={{ width: board_dimx + "px" }}>
+              <div>
+                <div>Card:</div>
+                <div className="remaining_cards">
+                  Remaining: {this.get_cur_deck().length}
+                </div>
+              </div>
+              <Card card={cur_card} color={cur_color} kind="show" />
+            </div>
+          )}
+          <Results
+            player_scores={this.state.player_scores}
+            player_color={this.state.player_color}
+            width={board_dimx}
+          />
+          <div className="menu">
+            <input type="button" value="Reset" onClick={this.reset} />
           </div>
-        )}
-        <Results
-          player_scores={this.state.player_scores}
-          player_color={this.state.player_color}
-          width={board_dimx}
-        />
-        <div className="menu">
-        <input type="button" value="Reset" onClick={this.reset} />
-      </div>
-      </div>
+        </>
+      )}
+    </div>
     );
   }
 }
