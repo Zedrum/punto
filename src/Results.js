@@ -6,7 +6,6 @@ import Card from "./Card.js";
 
 function Results({ player_scores, player_color, width }) {
   const { fontSize: playerNameFontSize, ref: playerNameRef } = useFitText();
-  const { fontSize: scoreFontSize, ref: scoreRef } = useFitText();
 
   if (player_scores.map((scores) => scores.length > 0).includes(true)) {
     const board_padding = 20;
