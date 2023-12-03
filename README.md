@@ -60,3 +60,7 @@ L'application enregistre les données de fin de partie dans différentes bases d
 ## Auteur
 
 Ce projet a été créé par Yann-Maël PERON.
+
+![UML BDD](images/uml_bdd.png)
+
+![UML APP](images/uml_app.png)
