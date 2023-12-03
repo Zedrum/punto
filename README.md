@@ -54,13 +54,18 @@ L'application enregistre les données de fin de partie dans différentes bases d
 
 ## Notes supplémentaires
 
-- L'application utilise Express.js pour le backend, et différentes bases de données (MongoDB, MySQL, SQLite) pour stocker les données de jeu.
+- L'application utilise React.js pour le frontend, et différentes bases de données (MongoDB, MySQL, SQLite) pour stocker les données de jeu.
 - Les données sont envoyées à l'API à la fin de chaque partie complète (2 manches gagnantes).
 
 ## Auteur
 
 Ce projet a été créé par Yann-Maël PERON.
 
+Voici le diagramme UML des bases de données :
+Ce diagramme concerne uniquement les bases mysql et sqlite car la base mongoDB est une base de données NoSQL. Donc tout le contenu d'une partie est dans une sule collection.
+
 ![UML BDD](images/uml_bdd.png)
 
-![UML APP](images/uml_app.png)
+Voici le diagramme de séquence de l'application :
+
+![SEQUENCE](images/sequence_app.png)
