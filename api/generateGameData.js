@@ -36,7 +36,7 @@ function generateGameData(numGames, playsPerGame) {
     const shuffledPlays = [];
     for (let i = 0; i < playsPerGame; i++) {
       for (let j = 0; j < n_players; j++) {
-        const move = plays.find(play => play.player === j && play.play_counter === i); // Filtrer par play_counter
+        const move = plays.find(play => play.player === j && play.play_counter === i);
         if (move) {
           shuffledPlays.push(move);
         }

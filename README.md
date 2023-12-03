@@ -1,70 +1,62 @@
-# Getting Started with Create React App
+# Punto - Principe du jeu
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Le but du jeu Punto est simple : aligner 5 cartes de votre couleur. Chaque joueur pose tour à tour une carte, en les connectant les unes aux autres ou en recouvrant une carte déjà posée, à condition que celle-ci ait une valeur inférieure.
 
-## Available Scripts
+## Mécanique de jeu
 
-In the project directory, you can run:
+- **Objectif**: Aligner 5 cartes de votre couleur sur le plateau de jeu.
+- **Nombre de joueurs**: De 2 à 4 joueurs.
+- **Déroulement d'une partie**:
+  - Chaque joueur pose une carte à tour de rôle sur le plateau.
+  - La carte peut être posée à côté d'une carte déjà jouée ou recouvrir une carte de valeur inférieure.
+  - L'objectif est de créer une ligne de 5 cartes de votre couleur, soit horizontalement, verticalement ou en diagonale.
 
-### `npm start`
+## Stratégie et Astuces
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Connecter les cartes**: L'alignement des cartes est essentiel. Créez des connexions pour aligner vos cartes de manière stratégique.
+- **Recouvrement**: Le recouvrement est une tactique importante. Recouvrez les cartes des adversaires pour bloquer leurs alignements et renforcer les vôtres.
+- **Anticipation**: Anticipez les mouvements des adversaires pour bloquer leurs séquences tout en poursuivant vos propres alignements.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Fin de la partie
 
-### `npm test`
+La partie prend fin dès qu'un joueur parvient à aligner 5 cartes de sa couleur de manière consécutive. Ce joueur est déclaré vainqueur de la partie.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Remarque
 
-### `npm run build`
+Punto est un jeu simple à comprendre, mais qui demande de la stratégie et de l'anticipation. Les décisions de placement des cartes sont cruciales pour gagner la partie.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Comment lancer l'application
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Assurez-vous d'avoir Node.js installé sur votre système.
+2. Clonez ce dépôt sur votre machine locale.
+3. Installez les dépendances en exécutant la commande suivante dans le répertoire du projet :
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
 
-### `npm run eject`
+npm install
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Lancez l'application en exécutant la commande suivante :
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+npm start
 
-## Learn More
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## API et enregistrement des données
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+L'application enregistre les données de fin de partie dans différentes bases de données :
 
-### Code Splitting
+- Les données sont envoyées à MongoDB, MySQL et SQLite à la fin d'une partie complète (2 manches gagnantes).
+- Chaque base de données stocke les détails des parties, les mouvements des joueurs, et les scores finaux.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Notes supplémentaires
 
-### Analyzing the Bundle Size
+- L'application utilise Express.js pour le backend, et différentes bases de données (MongoDB, MySQL, SQLite) pour stocker les données de jeu.
+- Les données sont envoyées à l'API à la fin de chaque partie complète (2 manches gagnantes).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Auteur
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Ce projet a été créé par Yann-Maël PERON.
