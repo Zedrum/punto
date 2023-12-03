@@ -71,6 +71,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = DEFAULT_STATE();
+    this.state.selectedDatabase = 'mongodb';
   }
 
   componentDidMount() {
@@ -533,6 +534,9 @@ sendDataToApi = async (playsToSend) => {
       winner_color: winner_color,
       player_scores: player_scores,
     };
+
+    console.log('selectedDatabase', selectedDatabase)
+    console.log('requestBody', requestBody)
 
     const response = await fetch(apiUrl + selectedDatabase, {
       method: 'POST',

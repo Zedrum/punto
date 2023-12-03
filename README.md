@@ -61,11 +61,12 @@ L'application enregistre les données de fin de partie dans différentes bases d
 
 Ce projet a été créé par Yann-Maël PERON.
 
-Voici le diagramme UML des bases de données :
-Ce diagramme concerne uniquement les bases mysql et sqlite car la base mongoDB est une base de données NoSQL. Donc tout le contenu d'une partie est dans une sule collection.
+## Diagramme UML des bases de données :
+
+Ce diagramme concerne uniquement les bases mysql et sqlite car la base mongoDB est une base de données NoSQL. Donc tout le contenu d'une partie est dans une seule collection.
 
 ![UML BDD](images/uml_bdd.png)
 
-Voici le diagramme de séquence de l'application :
+## Diagramme de séquence de l'application :
 
 ![SEQUENCE](images/sequence_app.png)

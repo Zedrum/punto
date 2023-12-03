@@ -23,23 +23,20 @@ const port = 5000;
 app.use(bodyParser.json());
 app.use(cors({}));
 
-const PlaySchema = new mongoose.Schema({
-  game_id: { type: mongoose.Schema.Types.ObjectId, ref: 'games' },
-  player: Number,
-  card: Number,
-  x: Number,
-  y: Number,
-  play_counter: Number,
-});
-
-const PlayModel = mongoose.model('plays', PlaySchema);
-
-const GameModel = mongoose.model('games', {
+const GameSchema = new mongoose.Schema({
   n_players: Number,
   winning_player: Number,
-  winner_color: String, // Modification du schéma pour winner_color être une chaîne de caractères
+  winner_color: String,
   winner_score: Number,
+  plays: [{ 
+    player: Number,
+    card: Number,
+    x: Number,
+    y: Number,
+  }],
 });
+
+const GameModel = mongoose.model('games', GameSchema);
 
 const GameSQLModel = sequelizeMySQL.define('Games', {
   n_players: { type: DataTypes.INTEGER },
@@ -98,19 +95,12 @@ app.post('/mongodb', async (req, res) => {
     const gameMongo = await GameModel.create({
       n_players,
       winning_player,
-      winner_color: winner_color,
+      winner_color,
       winner_score: player_scores[0][0],
+      plays: plays.map((play, index) => ({
+        ...play,
+      })),
     });
-
-    const gameId = gameMongo._id;
-
-    const playsWithGameId = plays.map((play, index) => ({
-      ...play,
-      game_id: gameId,
-      play_counter: index + 1,
-    }));
-
-    await PlayModel.insertMany(playsWithGameId);
 
     res.status(201).json({ message: 'Partie créée avec succès dans MongoDB' });
   } catch (err) {
