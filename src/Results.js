@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import './Results.css'
 import Card from "./Card.js";
 
-function Results({ player_scores, player_color, width }) {
+function Results({ player_scores, player_color, width }) { // Résultats des joueurs
   const { fontSize: playerNameFontSize, ref: playerNameRef } = useFitText();
 
   if (player_scores.map((scores) => scores.length > 0).includes(true)) {

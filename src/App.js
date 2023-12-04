@@ -25,7 +25,7 @@ function no_card (x, y) {
 }
 
 const DEFAULT_STATE = () => {
-  const empty_board = [];  // Initialize an empty board
+  const empty_board = [];  // Initialise le plateau de jeu
   for (var i = 0; i < (BOARD_DIMENSION + 1) * (BOARD_DIMENSION + 1); i++) {
     const { x, y } = convert1DIndexTo2DCoordinates(i, BOARD_DIMENSION + 1, BOARD_DIMENSION + 1);
     empty_board.push({
@@ -68,24 +68,24 @@ const DEFAULT_STATE = () => {
 };
 
 class App extends Component {
-  constructor(props) {
+  constructor(props) { // Constructeur
     super(props);
     this.state = DEFAULT_STATE();
     this.state.selectedDatabase = 'mongodb';
   }
 
-  componentDidMount() {
+  componentDidMount() { // Lorsque le composant est monté
     this.setup();
   }
 
-  reset = () => {
+  reset = () => { // Réinitialiser le jeu
     const winningPlayer = this.state.winningPlayer; // Récupérer le joueur gagnant
     this.setState(
       {
         ...DEFAULT_STATE(),
         player_deck: Global.initializePlayerDecks(),
         showWinMessage: false,
-        winningPlayer: winningPlayer, // Rétablir le joueur gagnant après la réinitialisation
+        winningPlayer: winningPlayer,
       },
       () => {
         this.setup();
@@ -94,16 +94,16 @@ class App extends Component {
   };
 
 
-  handleDatabaseChange = (event) => {
+  handleDatabaseChange = (event) => { // Gére le chngement base de données
     this.setState({ selectedDatabase: event.target.value });
   };
 
-  setup() {
+  setup() { // Initialiser le jeu
     this.update_board();
     this.setup_decks();
   }
 
-  setup_decks() {
+  setup_decks() { // Initialiser les decks
     const decks = this.state.player_deck;
 
     for (var i = 0; i < this.state.n_players; i++) {
@@ -133,7 +133,7 @@ class App extends Component {
     DEFAULT_STATE(),
     () => {
       this.setState({ player_scores: scores, player_wins: updatedWins }, () => {
-        if (updatedWins[cur_player] === 1) {
+        if (updatedWins[cur_player] === 2) {
           this.setState({ showWinMessage: true, winningPlayer: cur_player }, () => {
             this.sendDataToApi(playsToSend);
           });
@@ -146,7 +146,7 @@ class App extends Component {
 };
 
 
-  mk_board() {
+  mk_board() { // Créer le plateau de jeu
     const {
       plays,
       virtual_board: { minx, maxx, miny, maxy },
@@ -237,7 +237,7 @@ class App extends Component {
     };
   }
 
-  update_board() {
+  update_board() { // Mettre à jour le plateau de jeu
     const board = this.mk_board();
     this.setState({ board }, this.win_condition);
   }
@@ -247,7 +247,7 @@ class App extends Component {
     return convert2DCoordinatesTo1DIndex(x - minx, y - miny, dimx, dimy);
   }
 
-  check_line(x, player, n_consec) { 
+  check_line(x, player, n_consec) { // Vérifier la ligne
     const { dimy, miny, board } = this.state.board;
 
     var n_consecutive = 0;
@@ -281,7 +281,7 @@ class App extends Component {
     return [];
   }
 
-  check_col(y, player, n_consec) { 
+  check_col(y, player, n_consec) { // Vérifier la colonne
     const { dimx, minx, board } = this.state.board;
 
     var n_consecutive = 0;
@@ -314,7 +314,7 @@ class App extends Component {
     return [];
   }
 
-  check_diag(x, y, player, n_consec, orient = true) {
+  check_diag(x, y, player, n_consec, orient = true) { // Vérifier la diagonale
 
     const { dimx, dimy, minx, miny, board } = this.state.board;
 
@@ -375,7 +375,7 @@ class App extends Component {
     return [];
   }
 
-  win_condition(n_consec = 4) {
+  win_condition(n_consec = 4) { // Condition de victoire
 
     if (this.state.plays.length === 0 || this.state.won) return;
 
@@ -427,52 +427,7 @@ class App extends Component {
     }
   }
 
-  alternative_win_condition() {
-    const {
-      n_players,
-      board: { minx, miny, dimx, dimy },
-    } = this.state;
-
-    const best_cards = [];
-
-    for (var p = 0; p < n_players; p++) {
-      var best_cards_p = [];
-      for (var x = minx; x < minx + dimx; x++) {
-        const best_cards_line = this.check_line(x, p, 3);
-        best_cards_p = [...best_cards_line, ...best_cards_p];
-      }
-      for (var y = miny; y < miny + dimy; y++) {
-        const best_cards_col = this.check_col(y, p, 3);
-        best_cards_p = [...best_cards_col, ...best_cards_p];
-      }
-
-      const mindim = Math.min(dimx, dimy);
-      for (var d = minx; d < minx + mindim; d++) {
-        const best_cards_diag1 = this.check_diag(dimx - d - 1, d, p, 3, true);
-        const best_cards_diag2 = this.check_diag(d, d, p, 3, false);
-        best_cards_p = [...best_cards_diag1, ...best_cards_diag2, ...best_cards_p];
-      }
-
-      best_cards.push(best_cards_p);
-    }
-
-    const n_sols = best_cards.map((a) => a.length);
-    const winner = n_sols.reduce(
-      (iMax, x, i, arr) => (x > arr[iMax] ? i : iMax),
-      0
-    );
-
-    const second_winner = n_sols.map(x => x === n_sols[winner]).includes(true)
-
-    if (best_cards[winner].length === 0 || second_winner) {
-        return { best_card: [], winner: -1 }
-    } else {
-      const best_card = Math.min(...best_cards[winner]);
-      return { best_card, winner }
-    }
-  }
-
-  handle_click = ({ x, y }) => {
+  handle_click = ({ x, y }) => { // Lors d'un clic sur une case
     const {
       n_players,
       cur_player,
@@ -520,7 +475,7 @@ class App extends Component {
     );
   };
 
-sendDataToApi = async (playsToSend) => {
+sendDataToApi = async (playsToSend) => { // Envoyer les données à l'API
   try {
     const apiUrl = 'http://localhost:5000/';
     const { selectedDatabase, n_players, winningPlayer, player_scores, player_color } = this.state;
@@ -534,9 +489,6 @@ sendDataToApi = async (playsToSend) => {
       winner_color: winner_color,
       player_scores: player_scores,
     };
-
-    console.log('selectedDatabase', selectedDatabase)
-    console.log('requestBody', requestBody)
 
     const response = await fetch(apiUrl + selectedDatabase, {
       method: 'POST',
@@ -557,11 +509,9 @@ sendDataToApi = async (playsToSend) => {
 };
 
 
-
-  // get the current player, card, and deck
   get_cur_player = () => this.state.cur_player;
 
-  get_cur_card = () => {
+  get_cur_card = () => { // Récupérer la carte du joueur courant
     const cur_player_deck = this.get_cur_deck();
     if (cur_player_deck && cur_player_deck.length > 0)
       return cur_player_deck[0];
@@ -569,11 +519,11 @@ sendDataToApi = async (playsToSend) => {
       return -1
   };
 
-  get_cur_deck = () => {
+  get_cur_deck = () => { // Récupérer le deck du joueur courant
     return this.state.player_deck[this.get_cur_player()];
   };
 
-  render() {
+  render() { // Affichage
     const { dimx } = this.state.board;
     const board_dimx = dimx * CARD_SIZE;
     const cur_player = this.get_cur_player();
@@ -585,7 +535,9 @@ sendDataToApi = async (playsToSend) => {
     }
     const cur_color = this.state.player_color[cur_player];
     return (
-          <div className="punto">
+      <div className="punto">
+        <img src="punto.webp" alt="Punto" className="punto-image" />
+
         {this.state.showWinMessage ? (
         <div className="win-message">
           <p>{message}</p>

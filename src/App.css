@@ -46,3 +46,8 @@
   font-size: 0.5em;
 }
 
+.punto-image {
+  max-width: 200px;
+  height: auto;
+}
+

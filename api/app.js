@@ -41,7 +41,7 @@ const GameModel = mongoose.model('games', GameSchema);
 const GameSQLModel = sequelizeMySQL.define('Games', {
   n_players: { type: DataTypes.INTEGER },
   winning_player: { type: DataTypes.INTEGER },
-  winner_color: { type: DataTypes.STRING }, // Modification du schéma pour winner_color être une chaîne de caractères
+  winner_color: { type: DataTypes.STRING },
   winner_score: { type: DataTypes.INTEGER },
 });
 
@@ -56,7 +56,7 @@ const PlaySQLModel = sequelizeMySQL.define('Plays', {
 const GameSQLiteModel = sequelizeSQLite.define('Games', {
   n_players: { type: DataTypes.INTEGER },
   winning_player: { type: DataTypes.INTEGER },
-  winner_color: { type: DataTypes.STRING }, // Modification du schéma pour winner_color être une chaîne de caractères
+  winner_color: { type: DataTypes.STRING },
   winner_score: { type: DataTypes.INTEGER },
 });
 

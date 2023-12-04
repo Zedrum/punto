@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import './Card.css'
 import Global from './GameConstants.js'
 
-function Card ({ card, color, x, y, kind, onClick }) {
+function Card ({ card, color, x, y, kind, onClick }) { // Carte
   return (
     <div className={`card ${kind}`}
          style={{ width: Global.CARD_SIZE+"px",

@@ -21,11 +21,10 @@ function generateGameData(numGames, playsPerGame) {
         const x = Math.floor(Math.random() * 10);
         const y = Math.floor(Math.random() * 10);
 
-        playerMoves.push({ player: i, card, x, y, play_counter: j }); // Ajout du play_counter
-        score += card; // Calculer le score du joueur en fonction des cartes
+        playerMoves.push({ player: i, card, x, y, play_counter: j });
+        score += card;
       }
 
-      // Trier les cartes pour obtenir les deux meilleures
       const sortedMoves = playerMoves.sort((a, b) => b.card - a.card);
       score = sortedMoves.slice(0, 2).reduce((acc, val) => acc + val.card, 0);
 
@@ -55,9 +54,9 @@ function generateGameData(numGames, playsPerGame) {
   return allGames;
 }
 
-async function sendDataToAPI() {
-  const numGames = 10;
-  const playsPerGame = 10;
+async function sendDataToAPI() { // Envoyer les données à l'API
+  const numGames = 10; // Choix du nombre de parties
+  const playsPerGame = 20; // Choix du nombre de coups par partie
 
   const gameData = generateGameData(numGames, playsPerGame);
   const apiUrlMongoDB = 'http://localhost:5000/mongodb';

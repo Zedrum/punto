@@ -25,6 +25,26 @@ La partie prend fin dès qu'un joueur parvient à aligner 5 cartes de sa couleur
 
 Punto est un jeu simple à comprendre, mais qui demande de la stratégie et de l'anticipation. Les décisions de placement des cartes sont cruciales pour gagner la partie.
 
+## Installez MongoDB, MySQL et SQLite sur votre machine :
+
+### MongoDB :
+
+- Téléchargez et installez MongoDB à partir du [site officiel de MongoDB](https://www.mongodb.com/try/download/community).
+- Suivez les instructions spécifiques à votre système d'exploitation pour terminer l'installation.
+
+### MySQL :
+
+- Téléchargez et installez MySQL à partir du [site officiel de MySQL](https://dev.mysql.com/downloads/mysql/).
+- Suivez les instructions d'installation fournies pour votre système d'exploitation.
+- Créez une base de données nommée `punto` dans MySQL pour stocker les données du jeu.
+
+### SQLite :
+
+- Téléchargez et installez SQLite à partir du [site officiel de SQLite](https://www.sqlite.org/download.html).
+- Suivez les instructions d'installation spécifiques à votre système.
+
+> Remarque : Pour MongoDB, aucune configuration supplémentaire n'est requise pour que l'application fonctionne correctement.
+
 ## Comment lancer l'application
 
 1. Assurez-vous d'avoir Node.js installé sur votre système.
@@ -45,6 +65,16 @@ npm start
 
 ```
 
+5. Lancez maintenant l'API en exécutant la commande suivante :
+
+```bash
+
+node api/app.js
+
+```
+
+Voilà ! L'application est maintenant lancée et prête à être utilisée.
+
 ## API et enregistrement des données
 
 L'application enregistre les données de fin de partie dans différentes bases de données :
@@ -55,18 +85,16 @@ L'application enregistre les données de fin de partie dans différentes bases d
 ## Notes supplémentaires
 
 - L'application utilise React.js pour le frontend, et différentes bases de données (MongoDB, MySQL, SQLite) pour stocker les données de jeu.
-- Les données sont envoyées à l'API à la fin de chaque partie complète (2 manches gagnantes).
+- Les données sont envoyées à l'API à la fin de chaque partie complète (2 manches gagnantes).7
+
+- Vous pouvez exécuter le script de génération de données pour générer des données de jeu aléatoires dans les bases de données. Pour ce faire, exécutez la commande suivante :
+
+```bash
+
+node script/generateGameData.js
+
+```
 
 ## Auteur
 
 Ce projet a été créé par Yann-Maël PERON.
-
-## Diagramme UML des bases de données :
-
-Ce diagramme concerne uniquement les bases mysql et sqlite car la base mongoDB est une base de données NoSQL. Donc tout le contenu d'une partie est dans une seule collection.
-
-![UML BDD](images/uml_bdd.png)
-
-## Diagramme de séquence de l'application :
-
-![SEQUENCE](images/sequence_app.png)
