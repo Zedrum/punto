@@ -133,7 +133,7 @@ class App extends Component {
     DEFAULT_STATE(),
     () => {
       this.setState({ player_scores: scores, player_wins: updatedWins }, () => {
-        if (updatedWins[cur_player] === 2) {
+        if (updatedWins[cur_player] === 2) { // manches gagnantes
           this.setState({ showWinMessage: true, winningPlayer: cur_player }, () => {
             this.sendDataToApi(playsToSend);
           });

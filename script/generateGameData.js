@@ -54,11 +54,11 @@ function generateGameData(numGames, playsPerGame) {
   return allGames;
 }
 
-async function sendDataToAPI() { // Envoyer les données à l'API
+async function sendDataToAPI() {
   const numGames = 10; // Choix du nombre de parties
-  const playsPerGame = 20; // Choix du nombre de coups par partie
+  const playsPerGamePerPlayer = 20; // Choix du nombre de coups par joueur par partie
 
-  const gameData = generateGameData(numGames, playsPerGame);
+  const gameData = generateGameData(numGames, playsPerGamePerPlayer);
   const apiUrlMongoDB = 'http://localhost:5000/mongodb';
   const apiUrlMySQL = 'http://localhost:5000/mysql';
   const apiUrlSQLite = 'http://localhost:5000/sqlite';

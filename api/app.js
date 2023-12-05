@@ -68,7 +68,6 @@ const PlaySQLiteModel = sequelizeSQLite.define('Plays', {
   y: { type: DataTypes.INTEGER },
 });
 
-// Vérifier et créer les tables si elles n'existent pas déjà
 
 async function checkAndCreateTables() {
   try {
