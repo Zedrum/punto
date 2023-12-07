@@ -4,6 +4,12 @@ const mongoose = require('mongoose');
 const { Sequelize, DataTypes } = require('sequelize');
 const cors = require('cors');
 const path = require('path');
+const neo4j = require('neo4j-driver');
+
+const driver = neo4j.driver('neo4j://localhost:7687', neo4j.auth.basic('neo4j', 'rootroot'));
+
+const session = driver.session();
+
 
 mongoose.connect('mongodb://localhost:27017/punto', {
   useNewUrlParser: true,
@@ -68,6 +74,57 @@ const PlaySQLiteModel = sequelizeSQLite.define('Plays', {
   y: { type: DataTypes.INTEGER },
 });
 
+const GameNeo4jModel = {
+  async createGame(gameData) {
+    const insertQuery = `
+      CREATE (g:Game {
+        n_players: $n_players,
+        winning_player: $winning_player,
+        winner_color: $winner_color,
+        winner_score: $winner_score
+      })
+      RETURN g
+    `;
+
+    try {
+      const result = await session.run(insertQuery, {
+        n_players: gameData.n_players,
+        winning_player: gameData.winning_player,
+        winner_color: gameData.winner_color,
+        winner_score: gameData.winner_score,
+      });
+
+      return result.records[0].get('g');
+    } catch (error) {
+      throw error;
+    }
+  },
+
+    async createPlay(gameId, playData) {
+    const insertQuery = `
+      MATCH (g:Game) WHERE id(g) = $gameId
+      CREATE (p:Play {
+        player: $player,
+        card: $card,
+        x: $x,
+        y: $y
+      })
+      MERGE (g)-[:HAS_PLAY]->(p)
+    `;
+
+    try {
+      await session.run(insertQuery, {
+        gameId,
+        player: playData.player,
+        card: playData.card,
+        x: playData.x,
+        y: playData.y,
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
+};
 
 async function checkAndCreateTables() {
   try {
@@ -161,6 +218,30 @@ app.post('/sqlite', async (req, res) => {
   } catch (err) {
     console.error('Erreur côté serveur (SQLite) :', err);
     res.status(500).json({ error: 'Erreur interne du serveur (SQLite)' });
+  }
+});
+
+app.post('/neo4j', async (req, res) => {
+  try {
+    const { n_players, winning_player, plays, winner_color, player_scores } = req.body;
+
+    const gameNode = await GameNeo4jModel.createGame({
+      n_players,
+      winning_player,
+      winner_color,
+      winner_score: player_scores[0][0],
+    });
+
+    const gameId = gameNode.identity.low;
+
+    for (let i = 0; i < plays.length; i++) {
+      await GameNeo4jModel.createPlay(gameId, plays[i]);
+    }
+
+    res.status(201).json({ message: 'Partie créée avec succès dans Neo4j' });
+  } catch (err) {
+    console.error('Erreur côté serveur (Neo4j) :', err);
+    res.status(500).json({ error: 'Erreur interne du serveur (Neo4j)' });
   }
 });
 

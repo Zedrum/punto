@@ -133,7 +133,7 @@ class App extends Component {
     DEFAULT_STATE(),
     () => {
       this.setState({ player_scores: scores, player_wins: updatedWins }, () => {
-        if (updatedWins[cur_player] === 2) { // manches gagnantes
+        if (updatedWins[cur_player] === 1) { // manches gagnantes
           this.setState({ showWinMessage: true, winningPlayer: cur_player }, () => {
             this.sendDataToApi(playsToSend);
           });
@@ -581,6 +581,7 @@ sendDataToApi = async (playsToSend) => { // Envoyer les données à l'API
               <option value="mongodb">MongoDB</option>
               <option value="mysql">MySQL</option>
               <option value="sqlite">SQLite</option>
+              <option value="neo4j">Neo4j</option>    
             </select>
           </div>
         </>
