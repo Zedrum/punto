@@ -55,13 +55,14 @@ function generateGameData(numGames, playsPerGame) {
 }
 
 async function sendDataToAPI() {
-  const numGames = 100; // Choix du nombre de parties
-  const playsPerGamePerPlayer = 20; // Choix du nombre de coups par joueur par partie
+  const numGames = 50; // Choix du nombre de parties
+  const playsPerGamePerPlayer = 5; // Choix du nombre de coups par joueur par partie
 
   const gameData = generateGameData(numGames, playsPerGamePerPlayer);
   const apiUrlMongoDB = 'http://localhost:5000/mongodb';
   const apiUrlMySQL = 'http://localhost:5000/mysql';
   const apiUrlSQLite = 'http://localhost:5000/sqlite';
+  const apiUrlNeo4j = 'http://localhost:5000/neo4j';
 
   try {
     for (let i = 0; i < gameData.length; i++) {
@@ -70,6 +71,8 @@ async function sendDataToAPI() {
       await axios.post(apiUrlMySQL, gameData[i]);
 
       await axios.post(apiUrlSQLite, gameData[i]);
+
+      await axios.post(apiUrlNeo4j, gameData[i]);
     }
   } catch (error) {
     console.error('Erreur lors de l\'envoi des données à l\'API :', error.message);
